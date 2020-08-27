@@ -1,9 +1,10 @@
 // Jenkinsfile
 String credentialsId = 'awsCredentials'
-
+//try catch block, checkout repo
 try {
   stage('checkout') {
     node {
+      //clean workspace
       cleanWs()
       checkout scm
     }
@@ -12,6 +13,7 @@ try {
   // Run terraform init
   stage('init') {
     node {
+      ///how to access AWS access keys with environment variables
       withCredentials([[
         $class: 'AmazonWebServicesCredentialsBinding',
         credentialsId: credentialsId,
@@ -40,7 +42,7 @@ try {
       }
     }
   }
-
+    ///only if the branch name is master then run terraform apply and do not want to pull request to run terraform apply and whens approved and merged then it will apply
   if (env.BRANCH_NAME == 'master') {
 
     // Run terraform apply
